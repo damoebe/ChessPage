@@ -1,0 +1,19 @@
+html{
+    height: 100vh;
+    display: grid;
+    background-color: rgb(97, 138, 143);
+    place-items: center;
+}
+#board{
+    height: 80vh;
+    width: 80vh;
+    display: grid;
+    grid-template-columns: repeat(8, 10vh);
+    grid-template-rows: repeat(8, 10vh);
+    background-color: rgb(189, 192, 189);
+    box-shadow: 10px 5px 5px black;
+}
+.field{
+    height: 10vh;
+    width: 10vh;
+}

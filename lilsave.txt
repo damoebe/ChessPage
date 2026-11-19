@@ -1,0 +1,19 @@
+for (let i = 0; i <vecs.length; i++){
+            let figure2 = this.getFigureAt(position.add(vecs[i]));
+            if (figure2 != null){
+                if (figure2.isWhite == figure.isWhite){
+                    vecs.splice(i, 1);
+                }
+            }
+            if (!position.add(vecs[i]).isOnBoard()){
+                vecs.splice(i, 1);
+            }
+        }
+        // check for pinned (new game version check for check)
+        for (let vec in vecs){
+            let gameClone = this.clone();
+            gameClone.moveFigure(position, position.add(vec));
+            if (gameClone.isCheck()){
+                vecs.splice(vecs.indexOf(vec), 1);
+            }
+        }
