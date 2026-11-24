@@ -30,7 +30,7 @@ function start_default_game(){
             if (figure != null){
                 let figureImage = document.createElement("img");
                 let color = figure.isWhite?"white":"black";
-                figureImage.src = "https://damoebe.github.io/ChessPage/assets/" + color + "-" + figure.type + ".png";
+                figureImage.src = "./assets/" + color + "-" + figure.type + ".png";
                 figureImage.classList.add("figure");
                 figureImage.style.gridArea = (Number(row) + 1).toString() + "/" + (Number(collumn) +1).toString();
                 figureImage.addEventListener("click", function(){
