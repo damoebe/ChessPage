@@ -37,7 +37,7 @@ class Game{
         return new Game(fields, true, true);
     }
     
-    unlimetedMovementFrom(position, isStraight){
+    unlimitedMovementFrom(position, isStraight){
         let vecs = [];
         let directions = [];
         if (isStraight){
@@ -137,15 +137,15 @@ class Game{
                         new Vec2d(1, -2), new Vec2d(-1, -2), new Vec2d(-2, -1), new Vec2d(-2, 1)];
                 break
             case "rook":
-                vecs = this.unlimetedMovementFrom(position, true);
+                vecs = this.unlimitedMovementFrom(position, true);
                 break
             case "bishop":
-                vecs = this.unlimetedMovementFrom(position, false);
+                vecs = this.unlimitedMovementFrom(position, false);
                 break
             case "queen":
-                vecs = this.unlimetedMovementFrom(position, true);
+                vecs = this.unlimitedMovementFrom(position, true);
                 vecs = vecs.concat(
-                    this.unlimetedMovementFrom(position, false)
+                    this.unlimitedMovementFrom(position, false)
                 );
                 break;
         
@@ -209,7 +209,7 @@ class Game{
         if (!position || !position.isOnBoard()) return null;
         return this.fields[position.y][position.x];
     }
-    // moves figure from pos a to pos b (returns true if it was a castle)
+    // moves figure from pos A to pos B (returns true if it was a castle)
     moveFigure(fromPos, toPos){
         if (!fromPos.isOnBoard() || !toPos.isOnBoard() || !fromPos){
             return
@@ -218,24 +218,25 @@ class Game{
         let figure = this.getFigureAt(fromPos);
         if (figure != null){
             figure.hasMoved = true
+            let movement = new Map()
             if (figure.type == "king" && Math.abs(toPos.x-fromPos.x) == 2){
-                this.playersTurn = !this.playersTurn;
                 this.fields[toPos.y][toPos.x] = figure;
                 this.fields[fromPos.y][fromPos.x] = null;
                 if (toPos.x == 2){
                     this.fields[fromPos.y][3] = this.fields[fromPos.y][0];
                     this.fields[fromPos.y][0] = null;
-                    return {from: new Vec2d(0, fromPos.y), to: new Vec2d(3, fromPos.y)}
+                    movement.set(new Vec2d(0, fromPos.y), new Vec2d(3, fromPos.y))
                 }else{
                     this.fields[fromPos.y][5] = this.fields[fromPos.y][7];
                     this.fields[fromPos.y][7] = null;
-                    return {from: new Vec2d(7, fromPos.y), to: new Vec2d(5, fromPos.y)}
+                    movement.set(new Vec2d(7, fromPos.y), new Vec2d(5, fromPos.y))
                 }
-                
             }
             this.fields[toPos.y][toPos.x] = figure;
             this.fields[fromPos.y][fromPos.x] = null;
+            movement.set(fromPos, toPos)
             this.playersTurn = !this.playersTurn;
+            return movement;
         }
     }
     makeRandomEngineMove(){
@@ -268,7 +269,7 @@ class Game{
         }
         return allMoves;
     }
-    makeEngineMove(steps = 3) {
+    makeEngineMove(steps = 2) {
         let simulatedGame = this.clone();
         let possibleMoves = simulatedGame.getGameLegalPossibleMovements();
         if (possibleMoves.length === 0) return null;
@@ -292,8 +293,7 @@ class Game{
         }
 
         console.log("best evaluation:", bestEvaluation);
-        this.moveFigure(bestMove.from, bestMove.to);
-        return bestMove;
+        return this.moveFigure(bestMove.from, bestMove.to);
     }
     // minimax algo
     minimax(game, steps, alpha, beta, isMaximizing) {
